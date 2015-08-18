@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html ng-app="esri-map-example">
+    <head>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+        <title>Map Events Example</title>
+
+        <!-- load Esri CSS -->
+        <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.14/esri/css/esri.css">
+    </head>
+    <body ng-controller="MapController">
+        <h2>Map Events Example</h2>
+        <!-- add map to page and bind to scope map parameters -->
+        <esri-map id="map" center="map.center" zoom="map.zoom" basemap="topo" load="mapLoaded" extent-change="extentChanged">
+        </esri-map>
+        <p>The map is <strong ng-show="!map.loaded">not</strong> loaded.</p>
+        <p>Extent: {{ map.extent.toJson() }}</p>
+        <!-- load Esri JavaScript API -->
+        <script type="text/javascript" src="http://js.arcgis.com/3.14compact"></script>
+        <!-- load Angular -->
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+        <!-- load angular-esri-map directives -->
+        <script src="lib/angular-esri-map.js"></script>
+        <!-- run example app controller -->
+        <script type="text/javascript">
+            angular.module('esri-map-example', ['esri.map'])
+                .controller('MapController', function ($scope) {
+                    $scope.map = {
+                        center: {
+                            lng: -122.45,
+                            lat: 37.75
+                        },
+                        zoom: 13,
+                        loaded: false,
+                    };
+                    // one way to get a reference to the map is to
+                    // set a handler for the map directive's load attribute
+                    $scope.mapLoaded = function(map) {
+                        // now you have a reference to the map
+                        // that you can do whatever you want with
+                        console.log(map);
+                        $scope.map.loaded = true;
+                    };
+                    // the map directive also exposes an extent-change attribute
+                    $scope.extentChanged = function(e) {
+                        // now you have a reference to the extent
+                        $scope.map.extent = e.extent;
+                    };
+                });
+        </script>
+    </body>
+</html>

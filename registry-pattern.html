@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html ng-app="esri-map-example">
+    <head>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+        <title>Registry Pattern Example</title>
+
+        <!-- load Esri CSS -->
+        <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.14/esri/css/esri.css">
+    </head>
+    <body ng-controller="MapController">
+        <h2>Registry Pattern Example</h2>
+        <!-- add map to page and bind to scope map parameters -->
+        <esri-map id="map" register-as="myMap" center="map.center" zoom="map.zoom" basemap="topo">
+        </esri-map>
+        <p ng-show="!map.point">Click the map to see point X / Y.</p>
+        <p ng-show="map.point">Clicked point X: {{ map.point.x }}, Y: {{ map.point.y }}</p>
+        <!-- load Esri JavaScript API -->
+        <script type="text/javascript" src="http://js.arcgis.com/3.14compact"></script>
+        <!-- load Angular -->
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+        <!-- load angular-esri-map directives -->
+        <script src="lib/angular-esri-map.js"></script>
+        <!-- run example app controller -->
+        <script type="text/javascript">
+            angular.module('esri-map-example', ['esri.map'])
+                .controller('MapController', function ($scope, esriRegistry) {
+                    $scope.map = {
+                        center: {
+                            lng: -122.45,
+                            lat: 37.75
+                        },
+                        zoom: 13,
+                        point: null,
+                    };
+                    // another way to get a reference to the map is to
+                    // set the register-as attribute on the directive
+                    // and then use the esriRegistry to get the map by name
+                    esriRegistry.get('myMap').then(function(map){
+                        map.on('click', function(e) {
+                            // NOTE: $scope.$apply() is needed b/c the map's click event
+                            // happens outside of Angular's digest cycle
+                            $scope.$apply(function() {
+                                $scope.map.point = e.mapPoint;
+                            });
+                        });
+                    });
+                });
+        </script>
+    </body>
+</html>
