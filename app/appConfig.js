@@ -64,6 +64,28 @@
             }
         }, {
             toc: {
+                title: 'Dynamic Map Service Layer',
+                description: 'Loads a dynamic map service layer into the map and shows how to bind layer properties such as visibility and opacity to external controls.',
+                url: urlPrefixes.templateHref + 'dynamic-map-service-layer'
+            },
+            route: {
+                path: urlPrefixes.routePath + 'dynamic-map-service-layer',
+                templateUrl: urlPrefixes.routeTemplateUrl + 'dynamic-map-service-layer.html',
+                controller: 'DynamicMapServiceLayerCtrl'
+            }
+        }, {
+            toc: {
+                title: 'Multiple Dynamic Map Service Layers',
+                description: 'Loads several dynamic map service layers into the map and shows how to bind layer properties as well as setup custom popups.',
+                url: urlPrefixes.templateHref + 'dynamic-map-service-layers'
+            },
+            route: {
+                path: urlPrefixes.routePath + 'dynamic-map-service-layers',
+                templateUrl: urlPrefixes.routeTemplateUrl + 'dynamic-map-service-layers.html',
+                controller: 'DynamicMapServiceLayersCtrl'
+            }
+        }, {
+            toc: {
                 title: 'Legend',
                 description: 'Show a legend for the map.',
                 url: urlPrefixes.templateHref + 'legend'
@@ -75,6 +97,17 @@
             }
         }, {
             toc: {
+                title: 'Add / Remove Layers',
+                description: 'Shows how to add/remove layers to/from the map.',
+                url: urlPrefixes.templateHref + 'add-remove-layers'
+            },
+            route: {
+                path: urlPrefixes.routePath + 'add-remove-layers',
+                templateUrl: urlPrefixes.routeTemplateUrl + 'add-remove-layers.html',
+                controller: 'AddRemoveLayersCtrl'
+            }
+        }, {
+            toc: {
                 title: 'Map Events',
                 description: 'Shows how to listen for events raised by the map directive and get a direct reference to the map object.',
                 url: urlPrefixes.templateHref + 'map-events'
@@ -83,6 +116,17 @@
                 path: urlPrefixes.routePath + 'map-events',
                 templateUrl: urlPrefixes.routeTemplateUrl + 'map-events.html',
                 controller: 'MapEventsCtrl'
+            }
+        }, {
+            toc: {
+                title: 'Layer Events',
+                description: 'Shows how to listen for events raised by layer directives and get a direct reference to the layer object.',
+                url: urlPrefixes.templateHref + 'layer-events'
+            },
+            route: {
+                path: urlPrefixes.routePath + 'layer-events',
+                templateUrl: urlPrefixes.routeTemplateUrl + 'layer-events.html',
+                controller: 'LayerEventsCtrl'
             }
         }, {
             toc: {
@@ -109,13 +153,35 @@
         }, {
             toc: {
                 title: 'No Basemap',
-                description: 'Shows how to load a map without a basemap using more complex map options such as a custom Extent and Popup.',
+                description: 'Shows how to load a map without a basemap using more complex map options such as a custom Extent.',
                 url: urlPrefixes.templateHref + 'no-basemap'
             },
             route: {
                 path: urlPrefixes.routePath + 'no-basemap',
                 templateUrl: urlPrefixes.routeTemplateUrl + 'no-basemap.html',
                 controller: 'NoBasemapCtrl'
+            }
+        }, {
+            toc: {
+                title: 'Custom Basemap',
+                description: 'Shows how to load a map with a custom basemap.',
+                url: urlPrefixes.templateHref + 'custom-basemap'
+            },
+            route: {
+                path: urlPrefixes.routePath + 'custom-basemap',
+                templateUrl: urlPrefixes.routeTemplateUrl + 'custom-basemap.html',
+                controller: 'CustomBasemapCtrl'
+            }
+        }, {
+            toc: {
+                title: 'Other Esri Modules',
+                description: 'Shows how to use other Esri modules that we have not included directives for (such as graphics, symbols, toolbars, etc.).',
+                url: urlPrefixes.templateHref + 'other-esri-modules'
+            },
+            route: {
+                path: urlPrefixes.routePath + 'other-esri-modules',
+                templateUrl: urlPrefixes.routeTemplateUrl + 'other-esri-modules.html',
+                controller: 'OtherEsriModulesController'
             }
         }]
     };

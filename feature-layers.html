@@ -6,7 +6,7 @@
         <title>Feature Layers</title>
 
         <!-- load Esri CSS -->
-        <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.14/esri/css/esri.css">
+        <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.11/esri/css/esri.css">
     </head>
     <body ng-controller="MapController">
         <h2>Feature Layers</h2>
@@ -30,7 +30,10 @@
                     displayOnPan: true,
                     gdbVersion: '10.3',
                     id: 'PortlandLightRail',
-                    infoTemplate: {title: 'Attributes', content: '${*}'},
+                    infoTemplate: {
+                        title: 'Portland Light Rail',
+                        content: '${*}'
+                    },
                     maxAllowableOffset: 500,
                     mode: 'MODE_SNAPSHOT',
                     opacity: 1.0,
@@ -48,7 +51,14 @@
             </esri-feature-layer>
             <esri-feature-layer
                 url="http://services.arcgis.com/rOo16HdIMeOBI4Mb/arcgis/rest/services/Portland_Parks/FeatureServer/0"
-                opacity="{{map.parksOpacity}}">
+                opacity="{{map.parksOpacity}}"
+                layer-options="{
+                    outFields:['NAME', 'ACRES']
+                }">
+                <esri-info-template title="Portland Parks">
+                    <div>Name: ${NAME}</div>
+                    <div>Size: ${ACRES:NumberFormat(places:1)} acres</div>
+                </esri-info-template>
             </esri-feature-layer>
         </esri-map>
         <p><label><input type="checkbox" ng-model="map.showTrees" /> Show trees</label></p>
@@ -75,9 +85,9 @@
         <p>Based on <a href="http://jsfiddle.net/patrickarlt/xy3nm1sq/1/">this JS Fiddle</a>.</p>
 
         <!-- load Esri JavaScript API -->
-        <script type="text/javascript" src="http://js.arcgis.com/3.14compact"></script>
+        <script type="text/javascript" src="http://js.arcgis.com/3.11compact"></script>
         <!-- load Angular -->
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.js"></script>
         <!-- load angular-esri-map directives -->
         <script src="lib/angular-esri-map.js"></script>
         <!-- run example app controller -->

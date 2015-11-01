@@ -6,9 +6,9 @@
         <title>Web Map</title>
 
         <!-- dijit theme only needed for chart tooltip in popup in this web map -->
-        <link rel="stylesheet" href="http://js.arcgis.com/3.14/dijit/themes/claro/claro.css">
+        <link rel="stylesheet" href="http://js.arcgis.com/3.11/dijit/themes/claro/claro.css">
         <!-- load Esri CSS -->
-        <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.14/esri/css/esri.css">
+        <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.11/esri/css/esri.css">
         <style>
         [ng-click]
         {
@@ -43,10 +43,10 @@
         </div>
         <p>Based on <a href="https://developers.arcgis.com/javascript/jssamples/ags_createwebmapid.html">this sample</a>.</p>
         <!-- load Esri JavaScript API -->
-        <script type="text/javascript" src="http://js.arcgis.com/3.14compact"></script>
+        <script type="text/javascript" src="http://js.arcgis.com/3.11compact"></script>
         <!-- load Angular -->
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-sanitize.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular-sanitize.js"></script>
         <!-- load angular-esri-map directives -->
         <script src="lib/angular-esri-map.js"></script>
         <!-- run example app controller -->
@@ -54,33 +54,29 @@
             'use strict';
             angular.module('esri-webmap-example', ['esri.map', 'ngSanitize'])
                 .controller('MapController', function ($scope, esriLoader) {
-                    // we're about to enter callback purgatory,
-                    // so let's bring along a reference to the controller
-                    var self = this;
+
+                    // initial map settings
+                    $scope.map = {
+                        center: {
+                            lng: -122.45,
+                            lat:  37.75
+                        },
+                        zoom: 13
+                    };
+
                     // this example requires the extent module
-                    // so let's go ahead and load that now
-                    esriLoader.require('esri/geometry/Extent').then(function(Extent) {
-                        $scope.map = {
-                            center: {
-                                lng: -122.45,
-                                lat:  37.75
-                            },
-                            zoom: 13
-                        };
-                        // get a reference to the map object once it's loaded
-                        $scope.mapLoaded = function(map) {
-                            self.mapObj = map;
-                        };
-                        // click handler for bookmark buttons
-                        $scope.goToBookmark = function(bookmark)
-                        {
-                            if (!self.mapObj) {
-                                return;
-                            }
-                            var extent = new Extent(bookmark.extent);
-                            self.mapObj.setExtent(extent);
-                        };
-                    });
+                    // so let's get that once the map is loaded
+                    $scope.mapLoaded = function(map) {
+                        esriLoader.require('esri/geometry/Extent').then(function(Extent) {
+                            // now that we have the Extent module, we can
+                            // wire up the click handler for bookmark buttons
+                            $scope.goToBookmark = function(bookmark) {
+                                var extent = new Extent(bookmark.extent);
+                                map.setExtent(extent);
+                            };
+                        });
+                    };
+
                 });
         </script>
     </body>
