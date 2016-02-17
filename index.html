@@ -6,93 +6,116 @@
     <meta charset="utf-8">
     <title>Angular Esri Map</title>
 
-    <!-- load bootstrap css -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="styles/narrow.css">
+    <!-- load calcite-bootstrap css -->
+    <link href="//esri.github.io/calcite-bootstrap/assets/css/calcite-bootstrap-open.min.css" rel="stylesheet">
 
     <!-- code snippet syntax highlighting -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/monokai_sublime.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
 
     <!-- load Esri CSS -->
-    <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.14/esri/css/esri.css">
+    <link rel="stylesheet" href="//js.arcgis.com/4.0beta3/esri/css/main.css">
 
-    <!-- custom styles for this app -->
-    <style type="text/css">
-        .jumbotron {
-            background: #091926 url('images/jumbotron-background.jpg') no-repeat right;
-            color: #fff;
-        }
-        .map {
-            margin-bottom: 10px;
-        }
-        .map .tooltip {
-            opacity: 1;
-        }
-        .tab-container {
-            padding-top: 1em;
-        }
-
-        /* overrides for narrow theme */
-        @media (min-width: 768px) {
-          .container {
-            max-width: 950px;
-          }
-        }
-
-    </style>
+    <!-- load custom styles for this app -->
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
 </head>
 
 <body>
     <div class="container">
         <!-- page header -->
-        <div class="header">
+        <div class="page-header">
             <ul class="nav nav-pills pull-right" role="tablist" ng-controller="NavCtrl">
+                <li role="presentation" ng-class="{ active: page === 'home' }"><a ng-href="#/home">Home</a>
+                </li>
                 <li role="presentation" ng-class="{ active: page === 'examples' }"><a ng-href="#/examples">Examples</a>
                 </li>
-                <li role="presentation" ng-class="{ active: page === 'about' }"><a ng-href="#/about">About</a>
+                <li role="presentation" ng-class="{ active: page === 'patterns' }"><a ng-href="#/patterns">Patterns</a>
                 </li>
-                <li role="presentation"><a href="http://github.com/esri/angular-esri-map">GitHub</a>
+                <li role="presentation"><a href="./docs">API</a>
+                </li>
+                <li role="presentation"><a href="https://arcgis.github.io/angular-esri-map-site-v1/">Previous Version (v1)</a>
+                <li role="presentation"><a href="//github.com/esri/angular-esri-map">GitHub</a>
                 </li>
             </ul>
             <h3 class="text-muted">angular-esri-map</h3>
         </div>
 
-        <!-- page content -->
-        <div ng-view=""></div>
-
-        <!-- source code snippets -->
-        <div ng-controller="SnippetsCtrl">
-            <ul ng-show="tabs" class="nav nav-tabs" ng-select ng-model="currentTab" select-class="{'active': $optSelected}">
-                <li ng-repeat="tab in tabs" ng-select-option="tab">
-                    <a href="">{{ tab }}</a>
-                </li>
-            </ul>
-            <div class="tab-container">
-                <div ng-repeat="tab in tabs">
-                  <div ng-if="tab == currentTab" hljs="" include="currentTab"></div>
+        <!-- shared left nav controller for examples and patterns; also modifies styling of snippets and footer -->
+        <div ng-controller="LeftNavCtrl">
+            <!-- left nav list group for example toc page and individual example pages -->
+            <div class="col-sm-3" ng-if="examplesLeftNavShow" style="display:none;" ng-style="{display: examplesLeftNavStyle}">
+                <div ng-repeat="(categoryKeyName, examplesArray) in examplePageCategories">
+                    <h4 class="page-header list-group-category">{{categoryKeyName}}</h4>
+                    <div class="list-group">
+                        <a href="{{example.toc.url}}"
+                            class="list-group-item"
+                            ng-class="{'active': example.route.controller === activeExample}"
+                            ng-repeat="example in examplesArray">
+                            {{example.toc.title}}
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- page footer -->
-        <div class="footer">
-            <p><span class="glyphicon glyphicon-heart"></span> from Esri</p>
+            <!-- left nav list group for patterns pages -->
+            <div class="col-sm-3" ng-if="patternsLeftNavShow" style="display:none;" ng-style="{display: patternsLeftNavStyle}">
+                <h4 class="page-header list-group-category">Patterns</h4>
+                <div class="list-group">
+                    <a ng-href="{{'#' + page.path}}"
+                        class="list-group-item"
+                        ng-class="{'active': page.path === activePath}",
+                        ng-repeat="page in patternsPages">
+                        {{page.shortTitle}}
+                    </a>
+                </div>
+            </div>
+
+            <!-- page content for ngRoute; apply a column size if the examples left nav is visible -->
+            <div ng-view="" autoscroll ng-class="{'col-sm-9': (examplesLeftNavShow || patternsLeftNavShow)}"></div>
+
+            <!-- source code snippets -->
+            <div>
+                <div class="col-sm-3"></div>
+                <div ng-controller="SnippetsCtrl" class="col-sm-9" style="display:none;" ng-style="{display: (examplesLeftNavStyle || patternsLeftNavStyle)}">
+                    <ul ng-show="tabs" class="nav nav-tabs" ng-select ng-model="currentTab" select-class="{'active': $optSelected}">
+                        <li ng-repeat="tab in tabs" ng-select-option="tab">
+                            <a href="">{{ tab }}</a>
+                        </li>
+                    </ul>
+                    <div class="tab-container">
+                        <div ng-repeat="tab in tabs">
+                          <div ng-show="tab === currentTab" hljs="" include="currentTab"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- page footer -->
+            <div class="footer" ng-class="{'col-xs-12': (examplesLeftNavShow || patternsLeftNavShow)}">
+                <p><span class="glyphicon glyphicon-heart"></span> from Esri</p>
+            </div>
         </div>
-    </div><!-- /container -->
+    </div>
+
+    <div ng-controller="AlertController">
+        <div ng-if="showAlert" class="alert alert-warning alert-dismissible version-alert" role="alert">
+            <button type="button" ng-click="hideAlert()" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            This documentation is for v2 <strong>beta</strong> and for use with v4.x of the ArcGIS API for JavaScript. If you are using v3.x of the ArcGIS API for JavaScript, please see <a href="https://arcgis.github.io/angular-esri-map-site-v1/">the v1 documentation</a>.</div>
+        </div>
+    </div>
 
     <!-- load Esri JavaScript API -->
     <!-- NOTE: defer is only needed b/c of UMD blocks in highlight.min.js -->
-    <script defer type="text/javascript" src="http://js.arcgis.com/3.14compact"></script>
+    <script defer type="text/javascript" src="//js.arcgis.com/4.0beta3/"></script>
 
     <!-- load Angular -->
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-sanitize.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
 
     <!-- code snippet syntax highlighting -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
-    <script src="http://pc035860.github.io/ngSelect/ngSelect.min.js"></script>
-    <script src="http://pc035860.github.io/angular-highlightjs/angular-highlightjs.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+    <script src="//pc035860.github.io/ngSelect/ngSelect.min.js"></script>
+    <script src="//pc035860.github.io/angular-highlightjs/angular-highlightjs.min.js"></script>
 
     <!-- load angular-esri-map module -->
     <script src="lib/angular-esri-map.js"></script>
@@ -100,27 +123,27 @@
     <!-- load this app -->
     <script type="text/javascript" src="app/app.js"></script>
     <script type="text/javascript" src="app/appConfig.js"></script>
-    <script type="text/javascript" src="app/about/about.js"></script>
+    <script type="text/javascript" src="app/home/home.js"></script>
+    <script type="text/javascript" src="app/patterns/patterns.js"></script>
     <script type="text/javascript" src="app/common/pathService.js"></script>
     <script type="text/javascript" src="app/common/nav.js"></script>
+    <script type="text/javascript" src="app/common/alertController.js"></script>
+    <script type="text/javascript" src="app/common/leftNavController.js"></script>
     <script type="text/javascript" src="app/examples/snippets.js"></script>
     <script type="text/javascript" src="app/examples/examples.js"></script>
-    <script type="text/javascript" src="app/examples/simple-map.js"></script>
-    <script type="text/javascript" src="app/examples/web-map.js"></script>
-    <script type="text/javascript" src="app/examples/feature-layers.js"></script>
-    <script type="text/javascript" src="app/examples/dynamic-map-service-layer.js"></script>
-    <script type="text/javascript" src="app/examples/dynamic-map-service-layers.js"></script>
-    <script type="text/javascript" src="app/examples/legend.js"></script>
-    <script type="text/javascript" src="app/examples/add-remove-layers.js"></script>
-    <script type="text/javascript" src="app/examples/set-basemap.js"></script>
-    <script type="text/javascript" src="app/examples/set-center-zoom.js"></script>
-    <script type="text/javascript" src="app/examples/map-events.js"></script>
-    <script type="text/javascript" src="app/examples/layer-events.js"></script>
-    <script type="text/javascript" src="app/examples/registry-pattern.js"></script>
-    <script type="text/javascript" src="app/examples/additional-map-options.js"></script>
-    <script type="text/javascript" src="app/examples/no-basemap.js"></script>
-    <script type="text/javascript" src="app/examples/custom-basemap.js"></script>
-    <script type="text/javascript" src="app/examples/other-esri-modules.js"></script>
+    <!-- example pages -->
+    <script type="text/javascript" src="app/examples/chaining-promises.js"></script>
+    <script type="text/javascript" src="app/examples/extrude-polygon.js"></script>
+    <script type="text/javascript" src="app/examples/feature-layer.js"></script>
+    <script type="text/javascript" src="app/examples/geodesic-buffers.js"></script>
+    <script type="text/javascript" src="app/examples/home-button.js"></script>
+    <script type="text/javascript" src="app/examples/popups.js"></script>
+    <script type="text/javascript" src="app/examples/property-binding.js"></script>
+    <script type="text/javascript" src="app/examples/scene-toggle-elevation.js"></script>
+    <script type="text/javascript" src="app/examples/scene-view.js"></script>
+    <script type="text/javascript" src="app/examples/search.js"></script>
+    <script type="text/javascript" src="app/examples/vector-tiles.js"></script>
+    <script type="text/javascript" src="app/examples/webscene-slides.js"></script>
 
     <!-- google analytics -->
     <script>

@@ -7,24 +7,49 @@
         .module('esri-map-docs', ['ngRoute', 'ngSanitize', 'ngSelect', 'hljs', 'esri.map'])
         .config(function($routeProvider, appConfig) {
             $routeProvider
+                // TODO: add home page
+                .when('/home', {
+                    templateUrl: 'app/home/home.html',
+                    controller: 'HomeCtrl'
+                })
                 .when('/examples', {
                     templateUrl: 'app/examples/examples.html',
                     controller: 'ExamplesCtrl'
                 })
+                .when('/patterns', {
+                    templateUrl: 'app/patterns/patterns.html',
+                    controller: 'PatternsCtrl'
+                })
                 .when('/about', {
-                    templateUrl: 'app/about/about.html',
-                    controller: 'AboutCtrl'
+                    redirectTo: '/patterns'
                 })
                 .otherwise({
-                    redirectTo: '/examples'
+                    redirectTo: '/home'
                 });
             // set routes of examples pages from appConfig
-            angular.forEach(appConfig.examplePages, function(example) {
+            angular.forEach(appConfig.examplePageCategories, function(examplesArray) {
+                angular.forEach(examplesArray, function(example) {
+                    $routeProvider
+                        .when(example.route.path, {
+                            templateUrl: example.route.templateUrl,
+                            controller: example.route.controller,
+                            controllerAs: example.route.controllerAs
+                        });
+                });
+            });
+
+            // set routes of patterns pages from appConfig
+            angular.forEach(appConfig.patternsPages, function(page) {
                 $routeProvider
-                    .when(example.route.path, {
-                        templateUrl: example.route.templateUrl,
-                        controller: example.route.controller
+                    .when(page.path, {
+                        templateUrl: page.templateUrl,
+                        controller: 'PatternsCtrl'
                     });
+            });
+
+            // redirects from previous version of docs
+            $routeProvider.when('/patterns/references-to-map-and-layers', {
+                redirectTo: '/patterns/references-to-views'
             });
         });
 })(angular);
