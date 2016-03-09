@@ -21,6 +21,7 @@
 
 <body>
 
+    <!-- top nav -->
     <nav class="navbar navbar-inverse navbar-static-top" style="margin-bottom: 20px;">
         <div class="container">
             <div class="navbar-header" style="float:left;">
@@ -35,25 +36,8 @@
             </ul>
         </div>
     </nav>
-    <div class="container">
-        <!-- page header -->
-        <!--
-        <div class="page-header">
-            <ul class="nav nav-pills pull-right" role="tablist" ng-controller="NavCtrl">
-                <li role="presentation" ng-class="{ active: page === 'examples' }"><a ng-href="#/examples">Examples</a>
-                </li>
-                <li role="presentation" ng-class="{ active: page === 'patterns' }"><a ng-href="#/patterns">Patterns</a>
-                </li>
-                <li role="presentation"><a href="./docs">API</a>
-                </li>
-                <li role="presentation"><a href="https://arcgis.github.io/angular-esri-map-site-v1/">v1 <span class="hidden-xs">Docs</span></a>
-                <li role="presentation"><a href="//github.com/esri/angular-esri-map">GitHub</a>
-                </li>
-            </ul>
-            <h3 class="text-muted"><a ng-href="#/home">angular-esri-map</a></h3>
-        </div>
-        -->
 
+    <div class="container">
         <!-- shared left nav controller for examples and patterns; also modifies styling of snippets and footer -->
         <div ng-controller="LeftNavCtrl">
         <div class="row">
@@ -149,6 +133,7 @@
     <script type="text/javascript" src="app/home/home.js"></script>
     <script type="text/javascript" src="app/patterns/patterns.js"></script>
     <script type="text/javascript" src="app/common/pathService.js"></script>
+    <script type="text/javascript" src="app/common/browserDetectionService.js"></script>
     <script type="text/javascript" src="app/common/nav.js"></script>
     <script type="text/javascript" src="app/common/alertController.js"></script>
     <script type="text/javascript" src="app/common/leftNavController.js"></script>
@@ -162,11 +147,13 @@
     <script type="text/javascript" src="app/examples/home-button.js"></script>
     <script type="text/javascript" src="app/examples/popups.js"></script>
     <script type="text/javascript" src="app/examples/property-binding.js"></script>
+    <script type="text/javascript" src="app/examples/registry-pattern.js"></script>
     <script type="text/javascript" src="app/examples/scene-toggle-elevation.js"></script>
     <script type="text/javascript" src="app/examples/scene-view.js"></script>
     <script type="text/javascript" src="app/examples/search.js"></script>
     <script type="text/javascript" src="app/examples/vector-tiles.js"></script>
     <script type="text/javascript" src="app/examples/webscene-slides.js"></script>
+    <script type="text/javascript" src="app/examples/webscene-slides-as-directive.js"></script>
 
     <!-- google analytics -->
     <script>
